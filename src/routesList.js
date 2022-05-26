@@ -1,5 +1,5 @@
 import Dashboard from "./Component/Dashboard/Dashboard"; 
-import Plans from "./Component/PricingPlan/Plans";  
+  
 export const baseUrl = '/admin';
 
 const routesList = [

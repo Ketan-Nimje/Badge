@@ -59,7 +59,6 @@ const App = () => {
       content: 'Dashboard',
       onAction: () => onRedirect(`/admin/dashboard?${urlParams.toString()}`),
       target: 'APP',
-      // url: `admin/dashboard?${urlParams.toString()}`
     }, 
   ];
 
