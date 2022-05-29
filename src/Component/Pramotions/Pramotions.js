@@ -8,6 +8,7 @@ import {
   Heading,
   RadioButton,
   DropZone,
+  Thumbnail,
 } from "@shopify/polaris";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
@@ -96,6 +97,121 @@ const Pramotions = () => {
                 </Layout>
               </div>
             </Card.Section>
+          </Card>
+          <Card sectioned title="Product title">
+            <div className="row row-0">
+              <div className="col col-md-3 col-12">
+                <Card>
+                  <div className="product-card-content">
+                    <img src="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg" />
+                  </div>
+                  <Card.Section>
+                    <Heading>$700 CAD</Heading>
+                    <p>
+                      Lorem Ipsum is simply dummy text of the printing and
+                      typesetting industry.
+                    </p>
+                  </Card.Section>
+                </Card>
+              </div>
+            </div>
+            <div className="row mt-2">
+              <div className="col col-md-6 col-12">
+                <div style={{ maxWidth: 114 }} className="mt-2">
+                  <DropZone label="Mobile">
+                    <DropZone.FileUpload />
+                  </DropZone>
+                </div>
+              </div>
+              <div className="col col-md-6 col-12">
+                <div style={{ maxWidth: 114 }} className="mt-2">
+                  <DropZone label="Desktop">
+                    <DropZone.FileUpload />
+                  </DropZone>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 mb-2">
+              <Heading>Product Image title</Heading>
+            </div>
+            <div className="row row5">
+              <div className="col col-md-2 col-12">
+                <Thumbnail
+                  source="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg"
+                  size="large"
+                  alt="Black choker necklace"
+                />
+                <div className="mt-1">
+                  <RadioButton label="Bottom Left" />
+                </div>
+              </div>
+              <div className="col col-md-2 col-12">
+                <Thumbnail
+                  source="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg"
+                  size="large"
+                  alt="Black choker necklace"
+                />
+                <div className="mt-1">
+                  <RadioButton label="Bottom Right" />
+                </div>
+              </div>
+              <div className="col col-md-2 col-12">
+                <Thumbnail
+                  source="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg"
+                  size="large"
+                  alt="Black choker necklace"
+                />
+                <div className="mt-1">
+                  <RadioButton label="Top Left" />
+                </div>
+              </div>
+              <div className="col col-md-2 col-12">
+                <Thumbnail
+                  source="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg"
+                  size="large"
+                  alt="Black choker necklace"
+                />
+                <div className="mt-1">
+                  <RadioButton label="Top Right" />
+                </div>
+              </div>
+              <div className="col col-md-2 col-12">
+                <Thumbnail
+                  source="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg"
+                  size="large"
+                  alt="Black choker necklace"
+                />
+                <div className="mt-1">
+                  <RadioButton label="Full Top" />
+                </div>
+              </div>
+              <div className="col col-md-2 col-12">
+                <Thumbnail
+                  source="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg"
+                  size="large"
+                  alt="Black choker necklace"
+                />
+                <div className="mt-1">
+                  <RadioButton label="Full Bottom" />
+                </div>
+              </div>
+            </div>
+            <div className="row mt-2">
+              <div className="col col-md-6 col-12">
+                <div style={{ maxWidth: 114 }} className="mt-2">
+                  <DropZone label="Color Title ">
+                    <DropZone.FileUpload />
+                  </DropZone>
+                </div>
+              </div>
+              <div className="col col-md-6 col-12">
+                <div style={{ maxWidth: 114 }} className="mt-2">
+                  <DropZone label="Full image Title">
+                    <DropZone.FileUpload />
+                  </DropZone>
+                </div>
+              </div>
+            </div>
           </Card>
         </Layout.Section>
       </Layout>
