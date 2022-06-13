@@ -61,7 +61,6 @@ export class ApiService {
   }
 
   async postData(url, data, isFormData, header) {
-    debugger;
     const newData = qs.stringify(data);
     const config = {
       headers: {
@@ -185,6 +184,9 @@ export class ApiService {
 
   async getDetails(payload) {
     return await this.postMethodInstall(`${api}/get-shop`, payload);
+  }
+  async savePramotions(payload) {
+    return await this.postData(`${api}/save-pramotions`, payload, true);
   }
 }
 

@@ -485,3 +485,5 @@
   }
 
   .product-card-content img{ width: 100%;border-top-left-radius: 7px; border-top-right-radius: 7px;}
+  .badgesImage{height: 118px; width: 100%;}
+  .badgesImage img{height: 100%; width: 100%; object-position: center; object-fit: contain;}
