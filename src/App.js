@@ -22,6 +22,7 @@ const App = () => {
   const urlParams = new URLSearchParams(location.search);
   const apiService = new ApiService();
   const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigate();
 
   useEffect(() => {
     installApp();
@@ -48,33 +49,37 @@ const App = () => {
     }
   };
 
-  const navigation = useNavigate();
   let config;
 
   if (urlParams?.get("host")) {
     config = {
       apiKey: apiKey,
       host: urlParams?.get("host"),
-      forceRedirect: false,
+      forceRedirect: true,
     };
   } else {
     config = {
       apiKey: apiKey,
       shopOrigin: urlParams?.get("shop"),
-      forceRedirect: false,
+      forceRedirect: true,
     };
   }
   const tab = [
     {
       content: "Dashboard",
-      onAction: () => onRedirect(`/admin/dashboard?${urlParams.toString()}`),
+      onAction: () => onRedirect(`/public/admin/dashboard?${urlParams.toString()}`),
+      target: "APP",
+    },
+    {
+      content: "Pramotions",
+      onAction: () => onRedirect(`/public/admin/pramotions-list?${urlParams.toString()}`),
       target: "APP",
     },
   ];
 
   const primaryAction = {
     content: "Support",
-    onAction: () => onRedirect(`/admin/installation?${urlParams.toString()}`),
+    onAction: () => onRedirect(`/public/admin/installation?${urlParams.toString()}`),
     target: "APP",
   };
 
@@ -113,7 +118,7 @@ const App = () => {
                             <Helmet>
                               <title>Badge Promotions</title>
                             </Helmet>
-                            {/* <RoutePropagator /> */}
+                            <RoutePropagator />
                             <route.component apiService={apiService} />
                           </React.Fragment>
                         }

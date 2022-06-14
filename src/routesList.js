@@ -2,7 +2,7 @@ import Dashboard from "./Component/Dashboard/Dashboard";
 import Pramotions from "./Component/Pramotions/Pramotions";
 import PramotionsList from "./Component/Pramotions/PramotionsList";
 
-export const baseUrl = "/admin";
+export const baseUrl = "/public/admin";
 
 const routesList = [
   { path: `${baseUrl}/`, name: "Dashboard", component: Dashboard, exact: true },

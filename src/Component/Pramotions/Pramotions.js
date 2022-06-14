@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import {
   Page,
   Layout,
@@ -36,6 +38,11 @@ const initialState = {
 };
 
 const Pramotions = () => {
+
+  const navigation = useNavigate();
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+
   const apiService = new ApiService();
   const [date, setDate] = useState({
     startDate: moment().subtract(29, "days"),
@@ -94,7 +101,8 @@ const Pramotions = () => {
   };
 
   return (
-    <Page title="Pramotions">
+    <Page title="Pramotions" breadcrumbs={[{ content: 'Settings', onAction: () => navigation(`/public/admin/pramotions-list?${urlParams.toString()}`) }]}
+    >
       <Layout>
         <Layout.AnnotatedSection title="Pramotion Name">
           <Card sectioned>
@@ -192,11 +200,11 @@ const Pramotions = () => {
                         <img
                           src={
                             pramotionsDetails &&
-                            pramotionsDetails.badgesImage &&
-                            pramotionsDetails.badgesImage.name
+                              pramotionsDetails.badgesImage &&
+                              pramotionsDetails.badgesImage.name
                               ? window.URL.createObjectURL(
-                                  pramotionsDetails.badgesImage
-                                )
+                                pramotionsDetails.badgesImage
+                              )
                               : pramotionsDetails.badgesImage
                           }
                         />

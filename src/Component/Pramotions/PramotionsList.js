@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Page, Card, Button } from "@shopify/polaris";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import ApiService from "../../Apiservice";
+import {
+  DeleteMinor, EditMinor
+} from '@shopify/polaris-icons';
 
 const PramotionsList = () => {
   const apiService = new ApiService();
+  const navigation = useNavigate();
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
   const [pramotionsList, setPramotionsList] = useState([]);
 
   useEffect(() => {
@@ -20,22 +26,25 @@ const PramotionsList = () => {
   };
 
   return (
-    <Page title="Pramotions List">
+    <Page title="Pramotions List"
+      primaryAction={
+        <Button primary onClick={() => navigation(`/public/admin/pramotions?${urlParams.toString()}`)}> New Pramotions</Button>
+      }>
       <Card>
-        <div class="Polaris-DataTable Polaris-DataTable__ShowTotals">
-          <div class="Polaris-DataTable__ScrollContainer">
-            <table class="Polaris-DataTable__Table">
+        <div className="Polaris-DataTable Polaris-DataTable__ShowTotals">
+          <div className="Polaris-DataTable__ScrollContainer">
+            <table className="Polaris-DataTable__Table">
               <thead>
                 <tr>
                   <th
                     data-polaris-header-cell="true"
-                    class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header "
+                    className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header "
                     scope="col"
                   >
                     Title
                   </th>
                   <th
-                    class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric"
+                    className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric"
                     scope="col"
                   >
                     Action
@@ -46,18 +55,18 @@ const PramotionsList = () => {
                 {pramotionsList.map((x, i) => {
                   return (
                     <tr
-                      class="Polaris-DataTable__TableRow Polaris-DataTable--hoverable"
+                      className="Polaris-DataTable__TableRow Polaris-DataTable--hoverable"
                       key={i}
                     >
                       <th
-                        class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn"
+                        className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn"
                         scope="row"
                       >
                         {x.title}
                       </th>
-                      <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
-                        <Button>Edit</Button>&nbsp;&nbsp;
-                        <Button>Delete</Button>
+                      <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
+                        <Button icon={EditMinor} />&nbsp;&nbsp;
+                        <Button icon={DeleteMinor} />
                       </td>
                     </tr>
                   );

@@ -149,106 +149,11 @@ export default function Dashboard() {
                       <TextStyle variation="strong">100</TextStyle>
                     </div>
                   </Layout.Section>
-                  <Layout.Section oneThird>
-                    <div className="Polaris-grid">
-                      <Heading>Online store dashboard</Heading>
-                      <TextStyle variation="strong">100</TextStyle>
-                    </div>
-                  </Layout.Section>
-                  <Layout.Section oneThird>
-                    <div className="Polaris-grid">
-                      <Heading>Online store dashboard</Heading>
-                      <TextStyle variation="strong">100</TextStyle>
-                    </div>
-                  </Layout.Section>
-                  <Layout.Section oneThird>
-                    <div className="Polaris-grid">
-                      <Heading>Online store dashboard</Heading>
-                      <TextStyle variation="strong">100</TextStyle>
-                    </div>
-                  </Layout.Section>
                 </Layout>
               </Card.Section>
             </Card>
           </Layout.Section>
-          <Layout.Section>
-            <Stack>
-              <Stack.Item fill>
-                <Heading>Recently Activity</Heading>
-              </Stack.Item>
-              <Stack.Item>
-                <TextStyle variation="subdued">455 units available</TextStyle>
-              </Stack.Item>
-            </Stack>
-          </Layout.Section>
-          <Layout.Section oneHalf>
-            <Card
-              title="New subscriptions"
-              actions={[{ content: "Last 30 days", disabled: true }]}
-            >
-              <Card.Section>
-                {/* <TextStyle variation="subdued">455 units available</TextStyle> */}
-                <div style={{ width: "100%" }}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    containerProps={{ style: { height: "270px" } }}
-                    options={options}
-                  />
-                </div>
-              </Card.Section>
-            </Card>
-          </Layout.Section>
-          <Layout.Section oneHalf>
-            <Card
-              title="Finished subscriptions"
-              actions={[{ content: "Last 30 days", disabled: true }]}
-            >
-              <Card.Section>
-                {/* <TextStyle variation="subdued">455 units available</TextStyle> */}
-                <div style={{ width: "100%" }}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    containerProps={{ style: { height: "270px" } }}
-                    options={options}
-                  />
-                </div>
-              </Card.Section>
-            </Card>
-          </Layout.Section>
-          <Layout.Section oneHalf>
-            <Card
-              title="Finished subscriptions"
-              actions={[{ content: "Last 30 days", disabled: true }]}
-            >
-              <Card.Section>
-                {/* <TextStyle variation="subdued">455 units available</TextStyle> */}
-                <div style={{ width: "100%" }}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    containerProps={{ style: { height: "270px" } }}
-                    options={options}
-                  />
-                </div>
-              </Card.Section>
-            </Card>
-          </Layout.Section>
-          <Layout.Section oneHalf>
-            <Card
-              title="Finished subscriptions"
-              actions={[{ content: "Last 30 days", disabled: true }]}
-            >
-              <Card.Section>
-                {/* <TextStyle variation="subdued">455 units available</TextStyle> */}
-                <div style={{ width: "100%" }}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    containerProps={{ style: { height: "270px" } }}
-                    options={options}
-                  />
-                </div>
-              </Card.Section>
-            </Card>
-          </Layout.Section>
+
         </Layout>
       </Page>
     </React.Fragment>
