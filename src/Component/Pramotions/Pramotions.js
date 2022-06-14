@@ -48,6 +48,7 @@ const Pramotions = () => {
   const [specificProductId, setSpecificProductId] = useState([]);
 
   const onChangeCheckBox = (value) => {
+    debugger;
     const clone = [...showOn];
     const index = clone.findIndex((x) => x === value);
     if (index === -1) {

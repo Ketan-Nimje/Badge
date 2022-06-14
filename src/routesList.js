@@ -1,5 +1,6 @@
 import Dashboard from "./Component/Dashboard/Dashboard";
 import Pramotions from "./Component/Pramotions/Pramotions";
+import PramotionsList from "./Component/Pramotions/PramotionsList";
 
 export const baseUrl = "/admin";
 
@@ -9,6 +10,12 @@ const routesList = [
     path: `${baseUrl}/dashboard`,
     name: "Dashboard",
     component: Dashboard,
+    exact: true,
+  },
+  {
+    path: `${baseUrl}/pramotions-list`,
+    name: "Pramotions",
+    component: PramotionsList,
     exact: true,
   },
   {

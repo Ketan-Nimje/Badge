@@ -28,7 +28,6 @@ const host = urlParams.get("host");
 //     });
 // } else {
 instance.interceptors.request.use(function (config) {
-  debugger;
   const params = Object.fromEntries(urlParams);
   config.headers["Authorization"] = JSON.stringify(params);
   return config;
@@ -187,6 +186,10 @@ export class ApiService {
   }
   async savePramotions(payload) {
     return await this.postData(`${api}/save-pramotions`, payload, true);
+  }
+
+  async getPramotionsList(payload) {
+    return await this.postData(`${api}/list-pramotions`, payload);
   }
 }
 

@@ -1,17 +1,17 @@
-import { SET_SHOP_DETAILS, } from '../constent';
+import { SET_SHOP_DETAILS } from "../constent";
 
 const initialState = {
-  currency: '',
+  currency: "",
   free_trial_expire: null,
-  id: '',
-  money_format: '',
-  plan_name: '',
-  shop: '',
-  shop_owner: '',
-  store_email: '',
-  store_name: '',
-  timezone: '',
-  token: '',
+  id: "",
+  money_format: "",
+  plan_name: "",
+  shop: "",
+  shop_owner: "",
+  store_email: "",
+  store_name: "",
+  timezone: "",
+  token: "",
 };
 
 export default function shopDetailsReducer(state = initialState, action) {
@@ -20,10 +20,10 @@ export default function shopDetailsReducer(state = initialState, action) {
       return {
         ...state,
         ...action.payload,
-      }
+      };
     }
     default: {
-      return state
+      return state;
     }
   }
 }
