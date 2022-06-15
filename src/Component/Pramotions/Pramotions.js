@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 import {
   Page,
@@ -11,11 +11,18 @@ import {
   PageActions,
   FormLayout,
   Select,
+  Stack,
+  RadioButton,
+  Button,
+  Thumbnail,
 } from "@shopify/polaris";
+import { ImageMajor } from "@shopify/polaris-icons";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import moment from "moment";
 import ApiService from "../../Apiservice";
+import { ResourcePicker } from "@shopify/app-bridge-react";
+import { baseUrl } from "../../routesList";
 
 const initialState = {
   chooseYourBadges: "1",
@@ -35,14 +42,14 @@ const initialState = {
   opacity: "1",
   badgesText: "",
   badgesImage: "",
+  appliesTo: "AllProduct",
 };
 
 const Pramotions = () => {
-
   const navigation = useNavigate();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
-
+  const { id } = useParams();
   const apiService = new ApiService();
   const [date, setDate] = useState({
     startDate: moment().subtract(29, "days"),
@@ -53,9 +60,31 @@ const Pramotions = () => {
   const [showOn, setShowOn] = useState([]);
   const [specificCollectionsId, setSpecificCollectionsId] = useState([]);
   const [specificProductId, setSpecificProductId] = useState([]);
+  const [isOpenProductModal, setIsOpenProductModal] = useState(false);
+  const [isSave, setIsSave] = useState(false);
+
+  useEffect(() => {
+    if (id !== "new") {
+      getPramotion();
+    }
+  }, []);
+
+  const getPramotion = async () => {
+    const data = await apiService.editPramotions({ id });
+    if (data.status) {
+      setTitle(data.data.title);
+      setShowOn(data.data.show_on.split(","));
+      const jsonDecode = JSON.parse(data.data.pramotions_json);
+      setPramotionsDetails(jsonDecode);
+      setSpecificCollectionsId(
+        JSON.parse(data.data.specific_collections_id) || []
+      );
+      setSpecificProductId(JSON.parse(data.data.specific_product_id) || []);
+      setDate({ startDate: data.data.start_date, endDate: data.data.end_date });
+    }
+  };
 
   const onChangeCheckBox = (value) => {
-    debugger;
     const clone = [...showOn];
     const index = clone.findIndex((x) => x === value);
     if (index === -1) {
@@ -83,7 +112,11 @@ const Pramotions = () => {
   };
 
   const savePramotions = async () => {
+    setIsSave(true);
     const formData = new FormData();
+    if (id !== "new") {
+      formData.append("id", id);
+    }
     formData.append("title", title);
     formData.append("show_on", JSON.stringify(showOn));
     formData.append(
@@ -91,18 +124,88 @@ const Pramotions = () => {
       JSON.stringify(specificCollectionsId)
     );
     formData.append("specific_product_id", JSON.stringify(specificProductId));
-    formData.append("start_date", JSON.stringify(date.startDate));
-    formData.append("end_date", JSON.stringify(date.endDate));
+    formData.append("start_date",date.startDate);
+    formData.append("end_date",date.endDate);
     Object.keys(pramotionsDetails).map((x) => {
       formData.append(`pramotions_json[${x}]`, pramotionsDetails[x]);
     });
 
     const data = await apiService.savePramotions(formData);
+    if (data.status) {
+      setIsSave(false);
+      navigation(`${baseUrl}/pramotions-list?${urlParams.toString()}`);
+    } else {
+      setIsSave(false);
+    }
+  };
+
+  const onOpenProductModal = () => {
+    setIsOpenProductModal(true);
+  };
+  const onCloseProductModal = () => {
+    setIsOpenProductModal(false);
+  };
+
+  const onSelectProduct = (record) => {
+    if (pramotionsDetails.appliesTo === "Collection") {
+      let collectionList = [];
+      record.selection.map((x) => {
+        let obj = {
+          handle: x.handle,
+          id: x.id,
+          image: x.image,
+          title: x.title,
+        };
+        collectionList.push(obj);
+      });
+      setSpecificCollectionsId(collectionList);
+      setIsOpenProductModal(false);
+    } else {
+      let productList = [];
+      record.selection.map((x) => {
+        let obj = {
+          handle: x.handle,
+          id: x.id,
+          image: x && x.images && x.images[0] && x.images[0].originalSrc,
+          title: x.title,
+        };
+        productList.push(obj);
+      });
+      setSpecificProductId(productList);
+      setIsOpenProductModal(false);
+    }
   };
 
   return (
-    <Page title="Pramotions" breadcrumbs={[{ content: 'Settings', onAction: () => navigation(`/public/admin/pramotions-list?${urlParams.toString()}`) }]}
+    <Page
+      title="Pramotions"
+      breadcrumbs={[
+        {
+          content: "Settings",
+          onAction: () =>
+            navigation(`${baseUrl}/pramotions-list?${urlParams.toString()}`),
+        },
+      ]}
     >
+      {isOpenProductModal && (
+        <ResourcePicker
+          resourceType={
+            pramotionsDetails.appliesTo == "Collection"
+              ? "Collection"
+              : "Product"
+          }
+          showVariants={false}
+          open={isOpenProductModal}
+          onCancel={onCloseProductModal}
+          onSelection={onSelectProduct}
+          initialSelectionIds={
+            pramotionsDetails.appliesTo == "Collection"
+              ? specificCollectionsId
+              : specificProductId
+          }
+        />
+      )}
+
       <Layout>
         <Layout.AnnotatedSection title="Pramotion Name">
           <Card sectioned>
@@ -200,11 +303,11 @@ const Pramotions = () => {
                         <img
                           src={
                             pramotionsDetails &&
-                              pramotionsDetails.badgesImage &&
-                              pramotionsDetails.badgesImage.name
+                            pramotionsDetails.badgesImage &&
+                            pramotionsDetails.badgesImage.name
                               ? window.URL.createObjectURL(
-                                pramotionsDetails.badgesImage
-                              )
+                                  pramotionsDetails.badgesImage
+                                )
                               : pramotionsDetails.badgesImage
                           }
                         />
@@ -292,102 +395,222 @@ const Pramotions = () => {
                       })
                     }
                   />
-                  <TextField
-                    label="Font size"
-                    type="number"
-                    suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
-                    value={pramotionsDetails.fontSize}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "fontSize", value },
-                      })
-                    }
-                  />
-                  <Select
-                    label={"Text style"}
-                    options={[
-                      { label: "Normal", value: "1" },
-                      { label: "Italic", value: "2" },
-                    ]}
-                    value={pramotionsDetails.textStyle}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "textStyle", value },
-                      })
-                    }
-                  />
-                  <TextField
-                    label="Font color"
-                    type="color"
-                    value={pramotionsDetails.fontcolor}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "fontcolor", value },
-                      })
-                    }
-                  />
-                  <TextField
-                    label="Background color"
-                    type="color"
-                    value={pramotionsDetails.backgroundcolor}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "backgroundcolor", value },
-                      })
-                    }
-                  />
-                  <TextField
-                    label="Shadow"
-                    type="number"
-                    suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
-                    value={pramotionsDetails.shadow}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "shadow", value },
-                      })
-                    }
-                  />
-                  <TextField
-                    label="Shadow color"
-                    type="color"
-                    value={pramotionsDetails.shadowColor}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "shadowColor", value },
-                      })
-                    }
-                  />
-                  <TextField
-                    label="Border radius"
-                    type="number"
-                    suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
-                    value={pramotionsDetails.borderRadius}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "borderRadius", value },
-                      })
-                    }
-                  />
-                  <TextField
-                    label="Opacity"
-                    type="number"
-                    suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
-                    value={pramotionsDetails.opacity}
-                    onChange={(value) =>
-                      onChangeText({
-                        target: { name: "opacity", value },
-                      })
-                    }
-                  />
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <TextField
+                      label="Font size"
+                      type="number"
+                      suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
+                      value={pramotionsDetails.fontSize}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "fontSize", value },
+                        })
+                      }
+                    />
+                  )}
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <Select
+                      label={"Text style"}
+                      options={[
+                        { label: "Normal", value: "1" },
+                        { label: "Italic", value: "2" },
+                      ]}
+                      value={pramotionsDetails.textStyle}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "textStyle", value },
+                        })
+                      }
+                    />
+                  )}
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <TextField
+                      label="Font color"
+                      type="color"
+                      value={pramotionsDetails.fontcolor}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "fontcolor", value },
+                        })
+                      }
+                    />
+                  )}
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <TextField
+                      label="Background color"
+                      type="color"
+                      value={pramotionsDetails.backgroundcolor}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "backgroundcolor", value },
+                        })
+                      }
+                    />
+                  )}
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <TextField
+                      label="Shadow"
+                      type="number"
+                      suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
+                      value={pramotionsDetails.shadow}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "shadow", value },
+                        })
+                      }
+                    />
+                  )}
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <TextField
+                      label="Shadow color"
+                      type="color"
+                      value={pramotionsDetails.shadowColor}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "shadowColor", value },
+                        })
+                      }
+                    />
+                  )}
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <TextField
+                      label="Border radius"
+                      type="number"
+                      suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
+                      value={pramotionsDetails.borderRadius}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "borderRadius", value },
+                        })
+                      }
+                    />
+                  )}
+                  {pramotionsDetails.chooseYourBadges === "1" && (
+                    <TextField
+                      label="Opacity"
+                      type="number"
+                      suffix={pramotionsDetails.labelRatio === "1" ? "px" : "%"}
+                      value={pramotionsDetails.opacity}
+                      onChange={(value) =>
+                        onChangeText({
+                          target: { name: "opacity", value },
+                        })
+                      }
+                    />
+                  )}
                 </FormLayout.Group>
               </FormLayout>
             </div>
+          </Card>
+        </Layout.AnnotatedSection>
+        <Layout.AnnotatedSection title="Condition">
+          <Card>
+            <Card.Section>
+              <Stack vertical>
+                <Stack.Item>
+                  <RadioButton
+                    label="All products"
+                    checked={pramotionsDetails.appliesTo === "AllProduct"}
+                    id="Allproducts"
+                    name="appliesTo"
+                    onChange={() =>
+                      onChangeText({
+                        target: { name: "appliesTo", value: "AllProduct" },
+                      })
+                    }
+                  />
+                </Stack.Item>
+                <Stack.Item>
+                  <RadioButton
+                    label="Specific collections"
+                    id="specificCollections"
+                    name="appliesTo"
+                    checked={pramotionsDetails.appliesTo === "Collection"}
+                    onChange={() =>
+                      onChangeText({
+                        target: { name: "appliesTo", value: "Collection" },
+                      })
+                    }
+                  />
+                </Stack.Item>
+                <Stack.Item>
+                  <RadioButton
+                    label="Specific products"
+                    id="specificProducts"
+                    name="appliesTo"
+                    checked={pramotionsDetails.appliesTo === "Product"}
+                    onChange={() =>
+                      onChangeText({
+                        target: { name: "appliesTo", value: "Product" },
+                      })
+                    }
+                  />
+                </Stack.Item>
+                <Stack.Item>
+                  {pramotionsDetails.appliesTo !== "AllProduct" ? (
+                    <Button primary onClick={onOpenProductModal}>
+                      {pramotionsDetails.appliesTo === "Collection"
+                        ? "Select Collection"
+                        : "Select Product"}
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </Stack.Item>
+              </Stack>
+            </Card.Section>
+            {pramotionsDetails.appliesTo !== "AllProduct" ? (
+              <Card.Section
+                title={
+                  pramotionsDetails.appliesTo === "Collection"
+                    ? "Selected Collections"
+                    : "Selected Products"
+                }
+              >
+                {pramotionsDetails.appliesTo === "Collection"
+                  ? specificCollectionsId.map((x, i) => {
+                      return (
+                        <div
+                          className="row row5 align-item-center mb-2"
+                          key={i}
+                        >
+                          <div className="col col-auto">
+                            <Thumbnail
+                              size="small"
+                              source={x.image ? x.image : ImageMajor}
+                            />
+                          </div>
+                          <div className="col">{x.title}</div>
+                        </div>
+                      );
+                    })
+                  : specificProductId.map((x, i) => {
+                      return (
+                        <div
+                          className="row row5 align-item-center mb-2"
+                          key={i}
+                        >
+                          <div className="col col-auto">
+                            <Thumbnail
+                              size="small"
+                              source={x.image ? x.image : ImageMajor}
+                            />
+                          </div>
+                          <div className="col">{x.title}</div>
+                        </div>
+                      );
+                    })}
+              </Card.Section>
+            ) : (
+              ""
+            )}
           </Card>
         </Layout.AnnotatedSection>
       </Layout>
       <PageActions
         primaryAction={{
           content: "Save",
+          loading: isSave,
           onAction: savePramotions,
         }}
       />

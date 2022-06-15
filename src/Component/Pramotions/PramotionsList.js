@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Page, Card, Button } from "@shopify/polaris";
 import { useNavigate, useLocation } from "react-router-dom";
 import ApiService from "../../Apiservice";
-import {
-  DeleteMinor, EditMinor
-} from '@shopify/polaris-icons';
+import { DeleteMinor, EditMinor } from "@shopify/polaris-icons";
+import { baseUrl } from "../../routesList";
 
 const PramotionsList = () => {
   const apiService = new ApiService();
@@ -25,11 +24,19 @@ const PramotionsList = () => {
     }
   };
 
+  const onRedirect = (id) => {
+    navigation(`${baseUrl}/pramotions/${id}?${urlParams.toString()}`);
+  };
+
   return (
-    <Page title="Pramotions List"
+    <Page
+      title="Pramotions List"
       primaryAction={
-        <Button primary onClick={() => navigation(`/public/admin/pramotions?${urlParams.toString()}`)}> New Pramotions</Button>
-      }>
+        <Button primary onClick={() => onRedirect("new")}>
+          New Pramotions
+        </Button>
+      }
+    >
       <Card>
         <div className="Polaris-DataTable Polaris-DataTable__ShowTotals">
           <div className="Polaris-DataTable__ScrollContainer">
@@ -65,7 +72,11 @@ const PramotionsList = () => {
                         {x.title}
                       </th>
                       <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
-                        <Button icon={EditMinor} />&nbsp;&nbsp;
+                        <Button
+                          icon={EditMinor}
+                          onClick={() => onRedirect(x.pramotions_id)}
+                        />
+                        &nbsp;&nbsp;
                         <Button icon={DeleteMinor} />
                       </td>
                     </tr>

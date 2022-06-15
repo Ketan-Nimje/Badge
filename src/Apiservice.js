@@ -191,6 +191,9 @@ export class ApiService {
   async getPramotionsList(payload) {
     return await this.postData(`${api}/list-pramotions`, payload);
   }
+  async editPramotions(payload) {
+    return await this.postData(`${api}/edit-pramotions`, payload);
+  }
 }
 
 export default ApiService;
