@@ -19,7 +19,7 @@ const routesList = [
     exact: true,
   },
   {
-    path: `${baseUrl}/pramotions`,
+    path: `${baseUrl}/pramotions/:id`,
     name: "Pramotions",
     component: Pramotions,
     exact: true,

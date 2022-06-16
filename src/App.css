@@ -487,3 +487,50 @@
   .product-card-content img{ width: 100%;border-top-left-radius: 7px; border-top-right-radius: 7px;}
   .badgesImage{height: 118px; width: 100%;}
   .badgesImage img{height: 100%; width: 100%; object-position: center; object-fit: contain;}
+  .switch-button {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .switch-button input.switch-btn-input {
+    display: none;
+  }
+  .switch-button label.witch-button-label {
+    width: 35px;
+    height: 20px;
+    display: inline-block;
+    outline: 0;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 2px;
+    background: #f3f3f3;
+    border: 1px solid #e8eae9;
+    border-radius: 2em;
+  }
+  .switch-button label.witch-button-label:after {
+    content: "";
+    width: 50%;
+    height: 100%;
+    display: block;
+    position: relative;
+    left: 0;
+    border-radius: 2em;
+    background: #fbfbfb;
+    -webkit-transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 0 rgba(0, 0, 0, 0.08);
+  }
+  .switch-button input.switch-btn-input:checked + .witch-button-label {
+    background: #008060;
+  }
+  .switch-button input.switch-btn-input:checked + .witch-button-label:after {
+    left: 50%;
+  }
+  .switch-button.loadswitch label.witch-button-label {
+    cursor: no-drop;
+  }
+  
