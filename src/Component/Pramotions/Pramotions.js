@@ -76,10 +76,8 @@ const Pramotions = () => {
       setShowOn(data.data.show_on.split(","));
       const jsonDecode = JSON.parse(data.data.pramotions_json);
       setPramotionsDetails(jsonDecode);
-      setSpecificCollectionsId(
-        JSON.parse(data.data.specific_collections_id) || []
-      );
-      setSpecificProductId(JSON.parse(data.data.specific_product_id) || []);
+      setSpecificCollectionsId(data.data.specific_collections_id || []);
+      setSpecificProductId(data.data.specific_product_id || []);
       setDate({ startDate: data.data.start_date, endDate: data.data.end_date });
     }
   };
@@ -124,8 +122,8 @@ const Pramotions = () => {
       JSON.stringify(specificCollectionsId)
     );
     formData.append("specific_product_id", JSON.stringify(specificProductId));
-    formData.append("start_date",date.startDate);
-    formData.append("end_date",date.endDate);
+    formData.append("start_date", date.startDate);
+    formData.append("end_date", date.endDate);
     Object.keys(pramotionsDetails).map((x) => {
       formData.append(`pramotions_json[${x}]`, pramotionsDetails[x]);
     });
@@ -303,11 +301,11 @@ const Pramotions = () => {
                         <img
                           src={
                             pramotionsDetails &&
-                            pramotionsDetails.badgesImage &&
-                            pramotionsDetails.badgesImage.name
+                              pramotionsDetails.badgesImage &&
+                              pramotionsDetails.badgesImage.name
                               ? window.URL.createObjectURL(
-                                  pramotionsDetails.badgesImage
-                                )
+                                pramotionsDetails.badgesImage
+                              )
                               : pramotionsDetails.badgesImage
                           }
                         />
@@ -425,6 +423,7 @@ const Pramotions = () => {
                   )}
                   {pramotionsDetails.chooseYourBadges === "1" && (
                     <TextField
+                      suffix={pramotionsDetails.fontcolor}
                       label="Font color"
                       type="color"
                       value={pramotionsDetails.fontcolor}
@@ -437,6 +436,8 @@ const Pramotions = () => {
                   )}
                   {pramotionsDetails.chooseYourBadges === "1" && (
                     <TextField
+                      suffix={pramotionsDetails.backgroundcolor}
+
                       label="Background color"
                       type="color"
                       value={pramotionsDetails.backgroundcolor}
@@ -462,6 +463,8 @@ const Pramotions = () => {
                   )}
                   {pramotionsDetails.chooseYourBadges === "1" && (
                     <TextField
+                      suffix={pramotionsDetails.shadowColor}
+
                       label="Shadow color"
                       type="color"
                       value={pramotionsDetails.shadowColor}
@@ -569,37 +572,37 @@ const Pramotions = () => {
               >
                 {pramotionsDetails.appliesTo === "Collection"
                   ? specificCollectionsId.map((x, i) => {
-                      return (
-                        <div
-                          className="row row5 align-item-center mb-2"
-                          key={i}
-                        >
-                          <div className="col col-auto">
-                            <Thumbnail
-                              size="small"
-                              source={x.image ? x.image : ImageMajor}
-                            />
-                          </div>
-                          <div className="col">{x.title}</div>
+                    return (
+                      <div
+                        className="row row5 align-item-center mb-2"
+                        key={i}
+                      >
+                        <div className="col col-auto">
+                          <Thumbnail
+                            size="small"
+                            source={x.image ? x.image : ImageMajor}
+                          />
                         </div>
-                      );
-                    })
+                        <div className="col">{x.title}</div>
+                      </div>
+                    );
+                  })
                   : specificProductId.map((x, i) => {
-                      return (
-                        <div
-                          className="row row5 align-item-center mb-2"
-                          key={i}
-                        >
-                          <div className="col col-auto">
-                            <Thumbnail
-                              size="small"
-                              source={x.image ? x.image : ImageMajor}
-                            />
-                          </div>
-                          <div className="col">{x.title}</div>
+                    return (
+                      <div
+                        className="row row5 align-item-center mb-2"
+                        key={i}
+                      >
+                        <div className="col col-auto">
+                          <Thumbnail
+                            size="small"
+                            source={x.image ? x.image : ImageMajor}
+                          />
                         </div>
-                      );
-                    })}
+                        <div className="col">{x.title}</div>
+                      </div>
+                    );
+                  })}
               </Card.Section>
             ) : (
               ""
@@ -607,6 +610,7 @@ const Pramotions = () => {
           </Card>
         </Layout.AnnotatedSection>
       </Layout>
+      <br />
       <PageActions
         primaryAction={{
           content: "Save",

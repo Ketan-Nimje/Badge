@@ -9,30 +9,30 @@ const instance = axios.create();
 const urlParams = new URLSearchParams(window.location.search);
 const host = urlParams.get("host");
 
-// if (host) {
-//     const app = createApp({
-//         apiKey: '31c664dd7677d99206c1287579653430',
-//         host
-//     });
-//     instance.interceptors.request.use(function (config) {
-//         return getSessionToken(app)
-//             .then((token) => {
-//                 if (token) {
-//                     config.headers["Authorization"] = `Bearer ${token}`;
-//                 } else {
-//                     const params = Object.fromEntries(urlParams);
-//                     config.headers["Authorization"] = JSON.stringify(params);
-//                 }
-//                 return config;
-//             });
-//     });
-// } else {
-instance.interceptors.request.use(function (config) {
-  const params = Object.fromEntries(urlParams);
-  config.headers["Authorization"] = JSON.stringify(params);
-  return config;
-});
-// }
+if (host) {
+  const app = createApp({
+    apiKey: '31c664dd7677d99206c1287579653430',
+    host
+  });
+  instance.interceptors.request.use(function (config) {
+    return getSessionToken(app)
+      .then((token) => {
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        } else {
+          const params = Object.fromEntries(urlParams);
+          config.headers["Authorization"] = JSON.stringify(params);
+        }
+        return config;
+      });
+  });
+} else {
+  instance.interceptors.request.use(function (config) {
+    const params = Object.fromEntries(urlParams);
+    config.headers["Authorization"] = JSON.stringify(params);
+    return config;
+  });
+}
 
 export class ApiService {
   async getData(url, header) {

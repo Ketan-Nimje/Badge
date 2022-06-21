@@ -1,3 +1,13 @@
+input[type="color"] {
+  max-width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  flex-basis: 50px;
+  border: 0;
+}
+input[type="color" i]::-webkit-color-swatch {
+  border-radius: 5px;
+}
 .mx-0{margin-right: 0 !important;margin-left: 0 !important;}
 .mb-0{margin-bottom: 0 !important;}
 .mb-1{margin-bottom: 5px !important;}
